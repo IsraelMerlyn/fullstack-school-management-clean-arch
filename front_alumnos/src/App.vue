@@ -4,6 +4,30 @@ import Swal from 'sweetalert2';
 
 import AlumnoService  from './services/AlumnoService.js'
 
+//importamos nuestras funciones de validacion
+import { validarTexto, validarTelefono, validarURL } from './utils/regex.js';
+
+const esFormularioValido = () => {
+  errores.value = {};
+
+  if (!validarTexto(nuevoAlumno.value.nombre)) {
+    errores.value.nombre = "El nombre debe tener entre 3 y 50 letras.";
+  }
+  if (!validarTexto(nuevoAlumno.value.apellido)) {
+    errores.value.apellido = "El apellido debe tener entre 3 y 50 letras.";
+  }
+  if (!validarTexto(nuevoAlumno.value.carrera)) {
+    errores.value.carrera = "La carrera contiene caracteres no válidos.";
+  }
+  if (!validarTelefono(nuevoAlumno.value.telefono)) {
+    errores.value.telefono = "El teléfono debe ser de exactamente 10 dígitos.";
+  }
+  if (!validarURL(nuevoAlumno.value.imagenURL)) {
+    errores.value.imagenURL = "Formato de URL no válido.";
+  }
+  return Object.keys(errores.value).length === 0;
+};
+const errores = ref({});
 const alumnos = ref([]);
 
 const nuevoAlumno = ref({
@@ -29,6 +53,9 @@ const cargarAlumnos = async () => {
 }
 
 const agregarAlumno = async () => {
+  if (!esFormularioValido()) {
+    return;
+  }
   try {
     if (editado.value) {
 
@@ -112,7 +139,10 @@ onMounted(cargarAlumnos);
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="nombre" v-model="nuevoAlumno.nombre" required>
+                <input :class="{ 'is-invalid': errores.nombre }" type="text" class="form-control" id="nombre" v-model="nuevoAlumno.nombre" required>
+                <div class="invalid-feedback">
+                  {{ errores.nombre }}
+                </div>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="apellido" class="form-label">Apellidos</label>
@@ -124,7 +154,10 @@ onMounted(cargarAlumnos);
               </div>
               <div class="col-md-6 mb-3">
                 <label for="telefono" class="form-label">Telefono</label>
-                <input type="number" class="form-control" id="telefono" v-model="nuevoAlumno.telefono" required>
+                <input :class="{ 'is-invalid': errores.telefono }" type="number" class="form-control" id="telefono" v-model="nuevoAlumno.telefono" required>
+                <div class="invalid-feedback">
+                  {{ errores.telefono }}
+                </div>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="imagenURL" class="form-label">Imagen URL</label>

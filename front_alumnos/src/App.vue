@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
 import Swal from 'sweetalert2';
+
+import AlumnoService  from './services/AlumnoService.js'
 
 const alumnos = ref([]);
 
@@ -16,43 +17,53 @@ const nuevoAlumno = ref({
 const editado = ref(false);
 
 const cargarAlumnos = async () => {
+  try {
 
-  const response = await axios.get('http://localhost:8080/alumnos/traer-alumnos')
-  alumnos.value = response.data;
-  console.log(alumnos.value);
-}
-const agregarAlumno = async () => {
-  if (editado.value) {
-    await axios.put(`http://localhost:8080/alumnos/editar-alumnos/${nuevoAlumno.value.id}`, nuevoAlumno.value);
-    // editado.value = false
-  } else {
-    await axios.post('http://localhost:8080/alumnos/insertar-alumnos', nuevoAlumno.value);
-    Swal.fire({
-      icon: 'success',
-      title: 'Alumno agregado correctamente',
-      showConfirmButton: false,
-      timer: 1500
-    });
-
+    const response = await AlumnoService.obtenerAlumnos();
+    console.log('respuesta',response);
+    alumnos.value = response.data;
+    console.log('respuesta de value',alumnos.value);
+  } catch (error) {
+    console.error('Error al cargar alumnos', error);
   }
-
-  await cargarAlumnos();
-  nuevoAlumno.value = {
-    nombre: '',
-    apellido: '',
-    carrera: '',
-    telefono: '',
-    imagenURL: ''
-  };
 }
-// Función para editar un alumno
+
+const agregarAlumno = async () => {
+  try {
+    if (editado.value) {
+
+      await AlumnoService.actualizarAlumno(nuevoAlumno.value.id, nuevoAlumno.value);
+      editado.value = false;
+    } else {
+
+      await AlumnoService.guardarAlumno(nuevoAlumno.value);
+      Swal.fire({
+        icon: 'success',
+        title: 'Alumno agregado correctamente',
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
+
+    await cargarAlumnos();
+    nuevoAlumno.value = {
+      nombre: '',
+      apellido: '',
+      carrera: '',
+      telefono: '',
+      imagenURL: ''
+    };
+  } catch (error) {
+    console.error('Error al guardar el alumno', error);
+  }
+}
+
 const editarAlumnos = (alumno) => {
   Object.assign(nuevoAlumno.value, alumno);
-  editado.value = true
+  editado.value = true;
 }
 
 const eliminarAlumno = async (id) => {
-
   Swal.fire({
     title: '¿Estás seguro de eliminar el alumno?',
     text: "No podrás revertir esto!",
@@ -65,9 +76,9 @@ const eliminarAlumno = async (id) => {
     if (result.isConfirmed) {
       await eliminarAlumnoPorId(id);
       Swal.fire(
-        'Eliminado!',
-        'El alumno ha sido eliminado.',
-        'success'
+          'Eliminado!',
+          'El alumno ha sido eliminado.',
+          'success'
       )
     }
   })
@@ -75,8 +86,8 @@ const eliminarAlumno = async (id) => {
 
 const eliminarAlumnoPorId = async (id) => {
   try {
-    await axios.delete(`http://localhost:8080/alumnos/eliminar-alumnos/${id}`);
 
+    await AlumnoService.eliminarAlumno(id);
     console.log('Alumno eliminado con id:', id);
     await cargarAlumnos();
   } catch (errr) {
@@ -85,16 +96,12 @@ const eliminarAlumnoPorId = async (id) => {
       icon: 'error',
       title: 'Error al eliminar el alumno',
       text: 'No se pudo eliminar el alumno.',
-
     });
   }
 }
+
 onMounted(cargarAlumnos);
-
-
-
 </script>
-
 <template>
   <div class="container">
     <div class="row">

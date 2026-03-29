@@ -3,6 +3,8 @@ package com.israel.alumnos.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import com.israel.alumnos.dto.AlumnoDTO;
+import com.israel.alumnos.mapper.AlumnoMapper;
 import com.israel.alumnos.services.AlumnoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,10 +67,14 @@ public class AlumnoController {
 
     @Operation(summary = "Inscribir materia", description = "Asocia una materia existente al historial/carga académica de un alumno.")
     @PostMapping("/{alumnoId}/inscribir-materia/{materiaId}")
-    public ResponseEntity<Alumno> inscribirMateriaAAlumno(@PathVariable Long alumnoId, @PathVariable Long materiaId) {
+    public ResponseEntity<AlumnoDTO> inscribirMateriaAAlumno(@PathVariable Long alumnoId, @PathVariable Long materiaId) {
         try {
             Alumno alumnoActualizado = alumnoService.inscribirMateria(alumnoId, materiaId);
-            return ResponseEntity.ok(alumnoActualizado);
+            //mapeamos a nuestro DTO limpio
+            AlumnoDTO alumnoLimpio = AlumnoMapper.mapearADTO(alumnoActualizado);
+            return ResponseEntity.ok(alumnoLimpio);
+//            return ResponseEntity.ok(alumnoActualizado);
+
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }

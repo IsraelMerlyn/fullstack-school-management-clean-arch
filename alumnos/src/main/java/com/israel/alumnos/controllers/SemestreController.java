@@ -16,7 +16,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/semestres")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:5173")
 @Tag(name = "Semestres", description = "API para la gestión del catálogo de semestres")
 public class SemestreController {
     @Autowired

@@ -26,7 +26,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/alumnos")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:5173")
 @Tag(name = "Alumnos", description = "API para la gestión de alumnos del Instituto de Tlaxiaco (la Máxima casa de estudios)")
 
 public class AlumnoController {
@@ -73,7 +73,6 @@ public class AlumnoController {
             //mapeamos a nuestro DTO limpio
             AlumnoDTO alumnoLimpio = AlumnoMapper.mapearADTO(alumnoActualizado);
             return ResponseEntity.ok(alumnoLimpio);
-//            return ResponseEntity.ok(alumnoActualizado);
 
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();

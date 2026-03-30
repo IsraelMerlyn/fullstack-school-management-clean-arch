@@ -17,8 +17,7 @@ public class GlobalExceptionHandler {
     //recibe el argumento de las excepciones
     public Map<String, String> manejarValidaciones(MethodArgumentNotValidException ex) {
         Map<String, String> errores = new HashMap<>();
-        // Extraemos todos los errores de los campos y los metemos en un JSON { "campo" : "mensaje" }
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
+        ex.getBindingResult().getAllErrors().forEach(error-> {
             String nombreCampo = ((FieldError) error).getField();
             String mensajeError = error.getDefaultMessage();
             errores.put(nombreCampo, mensajeError);

@@ -2,6 +2,9 @@ package com.israel.alumnos.services;
 
 import java.util.List;
 import java.util.Optional;
+
+import com.israel.alumnos.model.Materia;
+import com.israel.alumnos.repository.MateriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.israel.alumnos.model.Alumno;
@@ -11,6 +14,8 @@ public class AlumnoService {
     @Autowired
     private AlumnoRepository alumnoRepository;
 
+    @Autowired
+    private MateriaRepository materiaRepository; // Necesitamos esto para buscar la materia a inscribir
     public List<Alumno> obtenerTodos() {
         return alumnoRepository.findAll();
     }
@@ -35,5 +40,22 @@ public class AlumnoService {
     }
     public void eliminarAlumno(Long id) {
         alumnoRepository.deleteById(id);
+    }
+    // Inscribir una materia a un alumno
+    public Alumno inscribirMateria(Long alumnoId, Long materiaId) {
+        // buscamos al alumno
+        Optional<Alumno> alumnoOpt = alumnoRepository.findById(alumnoId);
+        // uscamos la materia
+        Optional<Materia> materiaOpt = materiaRepository.findById(materiaId);
+        if (alumnoOpt.isPresent() && materiaOpt.isPresent()) {
+            Alumno alumno = alumnoOpt.get();
+            Materia materia = materiaOpt.get();
+            // agregamos la materia a la lista del alumno
+            alumno.getMaterias().add(materia);
+            //guardamos el alumno
+            return alumnoRepository.save(alumno);
+        } else {
+            throw new RuntimeException("Alumno o Materia no encontrados");
+        }
     }
 }

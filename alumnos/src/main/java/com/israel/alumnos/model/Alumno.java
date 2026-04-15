@@ -1,9 +1,6 @@
 package com.israel.alumnos.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -12,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -39,6 +38,14 @@ public class Alumno {
     @NotBlank(message = "La carrera es obligatoria")
     private String carrera;
     private String imagenURL;
+
+    @ManyToMany
+    @JoinTable(
+            name = "carga_academica",
+            joinColumns = @JoinColumn(name = "alumno_id"), // Llave foránea que apunta a Alumno
+            inverseJoinColumns = @JoinColumn(name = "materia_id") // Llave foránea que apunta a Materia
+    )
+    private List<Materia> materias;
 
 
 

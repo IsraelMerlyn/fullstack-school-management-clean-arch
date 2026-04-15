@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.israel.alumnos.services.AlumnoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,11 +39,11 @@ public class AlumnoController {
                 .orElse(ResponseEntity.notFound().build());
     }
     @PostMapping("/insertar-alumnos")
-    public Alumno insertarAlumno(@RequestBody Alumno alumno) {
+    public Alumno insertarAlumno(@Valid @RequestBody Alumno alumno) {
         return alumnoService.guardarAlumno(alumno);
     }
     @PutMapping("/editar-alumnos/{id}")
-    public ResponseEntity<Alumno> actualizarAlumno(@PathVariable Long id, @RequestBody Alumno alumno) {
+    public ResponseEntity<Alumno> actualizarAlumno(@PathVariable Long id, @Valid @RequestBody Alumno alumno) {
         Optional<Alumno> actualizado = alumnoService.actualizarAlumno(id, alumno);
         return actualizado.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

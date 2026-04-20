@@ -1,41 +1,48 @@
-<div>
-  <h2>{{ modoEdicion ? 'Editar alumno' : 'Nuevo alumno' }}</h2>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <h2 class="mb-4">{{ modoEdicion ? 'Editar alumno' : 'Nuevo alumno' }}</h2>
 
-  <form [formGroup]="form" (ngSubmit)="guardar()">
+      <form [formGroup]="form" (ngSubmit)="guardar()">
 
-    <div>
-      <label>Nombre</label>
-      <input formControlName="nombre" type="text" />
-      <span *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched">
-        El nombre es requerido
-      </span>
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input formControlName="nombre" type="text" id="nombre" class="form-control" [class.is-invalid]="form.get('nombre')?.invalid && form.get('nombre')?.touched" />
+          <div class="invalid-feedback" *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched">
+            El nombre es requerido
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="apellido" class="form-label">Apellido</label>
+          <input formControlName="apellido" type="text" id="apellido" class="form-control" [class.is-invalid]="form.get('apellido')?.invalid && form.get('apellido')?.touched" />
+          <div class="invalid-feedback" *ngIf="form.get('apellido')?.invalid && form.get('apellido')?.touched">
+            El apellido es requerido
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="correo" class="form-label">Correo</label>
+          <input formControlName="correo" type="email" id="correo" class="form-control" [class.is-invalid]="form.get('correo')?.invalid && form.get('correo')?.touched" />
+          <div class="invalid-feedback" *ngIf="form.get('correo')?.invalid && form.get('correo')?.touched">
+            Ingresa un correo válido
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="edad" class="form-label">Edad</label>
+          <input formControlName="edad" type="number" id="edad" class="form-control" [class.is-invalid]="form.get('edad')?.invalid && form.get('edad')?.touched" />
+          <div class="invalid-feedback" *ngIf="form.get('edad')?.invalid && form.get('edad')?.touched">
+            La edad debe ser mayor a 0
+          </div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Guardar</button>
+          <button type="button" class="btn btn-secondary" routerLink="/alumnos">Cancelar</button>
+        </div>
+
+      </form>
     </div>
-
-    <div>
-      <label>Apellido</label>
-      <input formControlName="apellido" type="text" />
-      <span *ngIf="form.get('apellido')?.invalid && form.get('apellido')?.touched">
-        El apellido es requerido
-      </span>
-    </div>
-
-    <div>
-      <label>Correo</label>
-      <input formControlName="correo" type="email" />
-      <span *ngIf="form.get('correo')?.invalid && form.get('correo')?.touched">
-        Ingresa un correo válido
-      </span>
-    </div>
-
-    <div>
-      <label>Edad</label>
-      <input formControlName="edad" type="number" />
-      <span *ngIf="form.get('edad')?.invalid && form.get('edad')?.touched">
-        La edad debe ser mayor a 0
-      </span>
-    </div>
-
-    <button type="submit" [disabled]="form.invalid">Guardar</button>
-
-  </form>
+  </div>
 </div>

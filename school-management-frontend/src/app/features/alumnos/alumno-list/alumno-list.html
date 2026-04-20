@@ -6,7 +6,7 @@
   </div>
 
   <div *ngIf="isLoading" class="text-center my-5">
-    <div class="spinner-border text-primary" role="status">
+    <div class="spinner-border text-primary" aria-label="Cargando">
       <span class="visually-hidden">Cargando...</span>
     </div>
   </div>
@@ -18,7 +18,6 @@
         <th>Nombre</th>
         <th>Apellido</th>
         <th>Correo</th>
-        <th>Edad</th>
         <th>Acciones</th>
       </tr>
     </thead>
@@ -28,9 +27,8 @@
         <td>{{ alumno.nombre }}</td>
         <td>{{ alumno.apellido }}</td>
         <td>{{ alumno.correo }}</td>
-        <td>{{ alumno.edad }}</td>
         <td>
-          <button (click)="editarAlumno(alumno.id)" class="btn btn-warning btn-sm me-2">Editar</button>
+          <button [routerLink]="['/alumnos/editar', alumno.id]" class="btn btn-warning btn-sm me-2">Editar</button>
           <button (click)="eliminarAlumno(alumno.id)" class="btn btn-danger btn-sm">Eliminar</button>
         </td>
       </tr>

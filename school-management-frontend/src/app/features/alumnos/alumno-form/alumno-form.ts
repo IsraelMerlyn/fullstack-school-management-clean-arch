@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AlumnoService } from '../../../core/services/alumno';
 import { Alumno } from '../../../core/models/alumno.model';
 
 @Component({
   selector: 'app-alumno-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './alumno-form.html',
   styleUrl: './alumno-form.scss'
 })
@@ -25,9 +25,9 @@ export class AlumnoFormComponent implements OnInit {
   alumnoId?: number;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private alumnoService: AlumnoService
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly alumnoService: AlumnoService
   ) {}
 
   ngOnInit(): void {

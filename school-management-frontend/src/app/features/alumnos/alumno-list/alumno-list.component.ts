@@ -1,23 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // 1. Importación necesaria
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { AlumnoService } from '../../../core/services/alumno';
 import { Alumno } from '../../../core/models/alumno.model';
 
 @Component({
   selector: 'app-alumno-list',
   standalone: true, // Indica que es un componente moderno e independiente
-  imports: [CommonModule], // 2. AQUÍ registras CommonModule para que funcione el *ngIf y *ngFor
+  imports: [CommonModule, RouterModule], //  AQUÍ registra CommonModule para que funcione el *ngIf y *ngFor
   templateUrl: './alumno-list.html',
-  styleUrls: ['./alumno-list.scss'] // 3. Cambiado a .scss para que coincida con tu archivo
+  styleUrls: ['./alumno-list.scss'] //  Cambiado a .scss para que coincida con tu archivo
 })
 export class AlumnoListComponent implements OnInit {
   alumnos: Alumno[] = [];
   isLoading: boolean = true;
 
   constructor(
-    private alumnoService: AlumnoService,
-    private router: Router
+    private readonly alumnoService: AlumnoService
   ) {}
 
   ngOnInit(): void {
@@ -36,12 +35,6 @@ export class AlumnoListComponent implements OnInit {
         this.isLoading = false;
       }
     });
-  }
-
-  editarAlumno(id: number | undefined): void {
-    if (id) {
-      this.router.navigate(['/alumnos/editar', id]);
-    }
   }
 
   eliminarAlumno(id: number | undefined): void {

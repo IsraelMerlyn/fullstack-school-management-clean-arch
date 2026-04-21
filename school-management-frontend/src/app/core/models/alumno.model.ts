@@ -1,7 +1,10 @@
 export interface Alumno {
-  id?: number;
+  id?: string;
   nombre: string;
+  numeroControl: string;
+  carrera: string;
   apellido: string;
-  correo: string;
-  edad: number;
+  telefono: string;
+  email: string;
+  imagenurl: string;
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AlumnoService } from '../../../core/services/alumno';
 import { Alumno } from '../../../core/models/alumno.model';
@@ -8,12 +8,13 @@ import { Alumno } from '../../../core/models/alumno.model';
 @Component({
   selector: 'app-alumno-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, FormsModule],
   templateUrl: './alumno-form.html',
-  styleUrl: './alumno-form.scss'
+  styleUrl: './alumno-form.scss',
 })
 export class AlumnoFormComponent implements OnInit {
 
+  alumnos: any[] = [];
   form = new FormGroup({
     nombre: new FormControl('', Validators.required),
     apellido: new FormControl('', Validators.required),

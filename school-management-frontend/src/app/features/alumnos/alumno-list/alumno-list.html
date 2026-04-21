@@ -1,41 +1,83 @@
-
-<div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Listado de Alumnos</h2>
-    <button class="btn btn-primary" routerLink="/alumnos/nuevo">Nuevo Alumno</button>
+<div class="dashboard-container">
+  <div class="search-header">
+    <div class="search-bar">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Buscar por Nombre o ID...">
+      <i class="fas fa-filter"></i>
+    </div>
+    <button class="btn btn-light btn-nuevo" (click)="abrirModalNuevo()">
+      <i class="fas fa-plus"></i> Agregar Alumnos
+    </button>
   </div>
 
-  <div *ngIf="isLoading" class="text-center my-5">
-    <div class="spinner-border text-primary" aria-label="Cargando">
-      <span class="visually-hidden">Cargando...</span>
+  <h2 class="section-title">Listado de Alumnos</h2>
+
+  <div class="student-grid">
+    <div class="student-card" *ngFor="let alumno of alumnos">
+      <div class="card-content">
+       <img [src]="alumno.imagenurl" class="avatar">
+        <div class="info">
+          <h3>{{ alumno.nombre }} {{ alumno.apellido }}</h3>
+          <span class="badge-id">Número de Control: {{ alumno.numeroControl }}</span>
+          <span class="badge-nivel">Carrera: {{ alumno.carrera }}</span>
+          <p><i class="fas fa-phone"></i> {{ alumno.telefono }}</p>
+          <p><i class="fas fa-envelope"></i> {{ alumno.email }}</p>
+        </div>
+      </div>
+      
+      <div class="card-actions">
+        <button class="btn-action edit" (click)="abrirModalEditar(alumno)">
+          <i class="fas fa-pencil-alt"></i>
+        </button>
+        <button (click)="eliminarAlumno(alumno.id)" class="btn-action delete">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
     </div>
   </div>
 
-  <table *ngIf="!isLoading && alumnos.length > 0" class="table table-hover shadow-sm">
-    <thead class="table-dark">
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Correo</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let alumno of alumnos">
-        <td>{{ alumno.id }}</td>
-        <td>{{ alumno.nombre }}</td>
-        <td>{{ alumno.apellido }}</td>
-        <td>{{ alumno.correo }}</td>
-        <td>
-          <button [routerLink]="['/alumnos/editar', alumno.id]" class="btn btn-warning btn-sm me-2">Editar</button>
-          <button (click)="eliminarAlumno(alumno.id)" class="btn btn-danger btn-sm">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="modal-overlay" *ngIf="mostrarModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>{{ editando ? 'Editar Alumno' : 'Nuevo Alumno' }}</h3>
+        <button class="btn-close" (click)="mostrarModal = false">&times;</button>
+      </div>
+      
+      <form (ngSubmit)="guardar()" class="modal-body">
+        <div class="input-group">
+          <label>Nombre(s)</label>
+          <input type="text" name="nombre" [(ngModel)]="alumnoSeleccionado.nombre">
+        </div>
+        <div class="input-group">
+          <label>Apellidos</label>
+          <input type="text" name="apellido" [(ngModel)]="alumnoSeleccionado.apellido">
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label>N. Control</label>
+            <input type="text" name="nControl" [(ngModel)]="alumnoSeleccionado.numeroControl">
+          </div>
+          <div class="input-group">
+            <label>Carrera</label>
+            <input type="text" name="carrera" [(ngModel)]="alumnoSeleccionado.carrera">
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Teléfono</label>
+          <input type="text" name="telefono" [(ngModel)]="alumnoSeleccionado.telefono">
+        </div>
+        <div class="input-group">
+          <label>Correo Electrónico</label>
+          <input type="email" name="email" [(ngModel)]="alumnoSeleccionado.email">
+        </div>
 
-  <div *ngIf="!isLoading && alumnos.length === 0" class="alert alert-warning text-center">
-    No se encontraron alumnos registrados en el sistema.
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" (click)="mostrarModal = false">Cancelar</button>
+          <button type="submit" class="btn-save">
+            {{ editando ? 'Actualizar Cambios' : 'Guardar Alumno' }}
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
